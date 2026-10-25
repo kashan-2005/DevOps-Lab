@@ -1,0 +1,24 @@
+# Python and local environments
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.env
+.env.*
+!.env.example
+
+# Angular dependencies and build outputs
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+.angular/
+
+# Full raw dataset (53 MB) stays local; only the 1-row sample is committed
+data/raw/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+
+# Local logs
+*.log

@@ -1,0 +1,98 @@
+<header class="masthead">
+  <div class="wrap">
+    <h1>Lifestyle Health Check</h1>
+    <p class="lede">
+      Three models read your answers and each casts a vote: Naive Bayes, Random Forest and a
+      Support Vector classifier. The majority decides, following the ensemble method of
+      Huang et al. (Scientific Reports, 2022).
+    </p>
+  </div>
+</header>
+
+@if (staticDemo) {
+  <div class="notice" role="status">
+    <div class="wrap">
+      <strong>Static GitHub Pages Demonstration - Local Flask backend required for live inference.</strong>
+      You can explore the form here; predictions work when the project runs on your computer.
+    </div>
+  </div>
+}
+
+<main class="wrap layout">
+  <form (ngSubmit)="submit()" class="form" novalidate>
+    <div class="form-tools">
+      <p>{{ fieldCount }} answers needed.</p>
+      <div class="tool-buttons">
+        <button type="button" class="ghost" (click)="fillSample()">Fill with sample person</button>
+        <button type="button" class="ghost" (click)="clear()">Clear</button>
+      </div>
+    </div>
+
+    @for (group of groups; track group.name) {
+      <fieldset>
+        <legend>{{ group.name }}</legend>
+        <div class="grid">
+          @for (f of group.fields; track f.name) {
+            <label>
+              <span class="label">{{ f.label }}</span>
+              @if (f.kind === 'number') {
+                <input type="number" [name]="f.name" [min]="f.min ?? null" [max]="f.max ?? null"
+                       [step]="f.step ?? 'any'" [(ngModel)]="values[f.name]" required />
+              } @else {
+                <select [name]="f.name" [(ngModel)]="values[f.name]" required>
+                  <option [ngValue]="null" disabled>Choose…</option>
+                  @for (o of f.options ?? []; track o) {
+                    <option [ngValue]="o">{{ o }}</option>
+                  }
+                </select>
+              }
+              @if (hint(f)) { <span class="hint">{{ hint(f) }}</span> }
+            </label>
+          }
+        </div>
+      </fieldset>
+    }
+  </form>
+
+  <aside class="panel" aria-live="polite">
+    <h2>Result</h2>
+
+    @if (result(); as r) {
+      <p class="verdict" [class.risk]="r.prediction === 'diseased'">
+        {{ r.prediction === 'diseased' ? 'Higher risk' : 'Healthy' }}
+      </p>
+      <p class="agreement">{{ r.agreement }} agree</p>
+      <ul class="ballot">
+        @for (v of voteList(r); track v.key) {
+          <li [class.risk]="v.vote === 'diseased'">
+            <span class="mark" aria-hidden="true"></span>
+            <span>{{ modelName(v.key) }}</span>
+            <span class="vote">{{ v.vote }}</span>
+          </li>
+        }
+      </ul>
+      <p class="fine">{{ r.disclaimer }}</p>
+    } @else if (error()) {
+      <p class="error" role="alert">{{ error() }}</p>
+    } @else {
+      <p class="empty">
+        Fill in every answer, or use the sample person, then check the result.
+      </p>
+    }
+
+    <button type="button" class="primary" (click)="submit()" [disabled]="loading() || staticDemo">
+      {{ loading() ? 'Checking…' : 'Check health risk' }}
+    </button>
+    @if (staticDemo) {
+      <p class="fine">Checking is turned off on the public page because it has no Python server.</p>
+    }
+  </aside>
+</main>
+
+<footer class="wrap foot">
+  <p>
+    Teaching prototype. Trained on 100,000 rows of the health_lifestyle_classification dataset with
+    SMOTE balancing and stratified 5-fold cross-validation. Cross-validated AUC is 0.50, so the
+    predictions carry no real diagnostic value. Not medical advice.
+  </p>
+</footer>

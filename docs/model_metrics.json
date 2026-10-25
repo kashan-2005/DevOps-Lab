@@ -1,0 +1,319 @@
+{
+  "rows": 100000,
+  "positive_rate": 0.299,
+  "features": [
+    "age",
+    "bmi",
+    "waist_size",
+    "blood_pressure",
+    "heart_rate",
+    "cholesterol",
+    "glucose",
+    "insulin",
+    "sleep_hours",
+    "work_hours",
+    "physical_activity",
+    "daily_steps",
+    "calorie_intake",
+    "sugar_intake",
+    "water_intake",
+    "screen_time",
+    "stress_level",
+    "mental_health_score",
+    "income",
+    "meals_per_day",
+    "gender",
+    "sleep_quality",
+    "alcohol_consumption",
+    "smoking_level",
+    "mental_health_support",
+    "education_level",
+    "job_type",
+    "occupation",
+    "diet_type",
+    "exercise_type",
+    "device_usage",
+    "healthcare_access",
+    "insurance",
+    "sunlight_exposure",
+    "caffeine_intake",
+    "family_history",
+    "pet_owner"
+  ],
+  "dropped_columns": {
+    "survey_code": "row identifier",
+    "electrolyte_level": "constant (always 0)",
+    "environmental_risk_score": "constant (always 5.5)",
+    "gene_marker_flag": "constant (always 1 or missing)",
+    "bmi_estimated": "exact duplicate of bmi",
+    "bmi_scaled": "bmi multiplied by 3",
+    "bmi_corrected": "noisy duplicate of bmi",
+    "height": "already captured by bmi",
+    "weight": "already captured by bmi",
+    "daily_supplement_dosage": "invalid values (negative dosages)"
+  },
+  "cross_validation_5fold": {
+    "ensemble": {
+      "sensitivity": {
+        "mean": 0.1687,
+        "sd": 0.0057,
+        "ci95": [
+          0.1637,
+          0.1737
+        ]
+      },
+      "specificity": {
+        "mean": 0.8317,
+        "sd": 0.0056,
+        "ci95": [
+          0.8268,
+          0.8367
+        ]
+      },
+      "ppv": {
+        "mean": 0.2996,
+        "sd": 0.0048,
+        "ci95": [
+          0.2954,
+          0.3038
+        ]
+      },
+      "npv": {
+        "mean": 0.7011,
+        "sd": 0.001,
+        "ci95": [
+          0.7002,
+          0.702
+        ]
+      },
+      "f1": {
+        "mean": 0.2158,
+        "sd": 0.0053,
+        "ci95": [
+          0.2112,
+          0.2204
+        ]
+      },
+      "auc": {
+        "mean": 0.5002,
+        "sd": 0.002,
+        "ci95": [
+          0.4985,
+          0.5019
+        ]
+      }
+    },
+    "naive_bayes": {
+      "sensitivity": {
+        "mean": 0.2426,
+        "sd": 0.0053,
+        "ci95": [
+          0.2379,
+          0.2472
+        ]
+      },
+      "specificity": {
+        "mean": 0.7571,
+        "sd": 0.0034,
+        "ci95": [
+          0.7541,
+          0.7601
+        ]
+      },
+      "ppv": {
+        "mean": 0.2987,
+        "sd": 0.0058,
+        "ci95": [
+          0.2936,
+          0.3038
+        ]
+      },
+      "npv": {
+        "mean": 0.7009,
+        "sd": 0.0018,
+        "ci95": [
+          0.6993,
+          0.7025
+        ]
+      },
+      "f1": {
+        "mean": 0.2677,
+        "sd": 0.0053,
+        "ci95": [
+          0.263,
+          0.2724
+        ]
+      },
+      "auc": {
+        "mean": 0.4998,
+        "sd": 0.0033,
+        "ci95": [
+          0.4969,
+          0.5027
+        ]
+      }
+    },
+    "random_forest": {
+      "sensitivity": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "specificity": {
+        "mean": 1.0,
+        "sd": 0.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "ppv": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "npv": {
+        "mean": 0.701,
+        "sd": 0.0,
+        "ci95": [
+          0.7009,
+          0.701
+        ]
+      },
+      "f1": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "auc": {
+        "mean": 0.5,
+        "sd": 0.0,
+        "ci95": [
+          0.5,
+          0.5
+        ]
+      }
+    },
+    "svc": {
+      "sensitivity": {
+        "mean": 0.4946,
+        "sd": 0.0074,
+        "ci95": [
+          0.4881,
+          0.5011
+        ]
+      },
+      "specificity": {
+        "mean": 0.5082,
+        "sd": 0.0022,
+        "ci95": [
+          0.5063,
+          0.5102
+        ]
+      },
+      "ppv": {
+        "mean": 0.3002,
+        "sd": 0.003,
+        "ci95": [
+          0.2977,
+          0.3028
+        ]
+      },
+      "npv": {
+        "mean": 0.7022,
+        "sd": 0.0029,
+        "ci95": [
+          0.6996,
+          0.7047
+        ]
+      },
+      "f1": {
+        "mean": 0.3737,
+        "sd": 0.0044,
+        "ci95": [
+          0.3698,
+          0.3775
+        ]
+      },
+      "auc": {
+        "mean": 0.5014,
+        "sd": 0.0035,
+        "ci95": [
+          0.4984,
+          0.5045
+        ]
+      }
+    }
+  },
+  "top15_svc_importance": [
+    {
+      "feature": "alcohol_consumption_None",
+      "importance": 0.0228
+    },
+    {
+      "feature": "job_type_Service",
+      "importance": 0.022
+    },
+    {
+      "feature": "job_type_Office",
+      "importance": 0.0201
+    },
+    {
+      "feature": "alcohol_consumption_Regularly",
+      "importance": 0.0146
+    },
+    {
+      "feature": "work_hours",
+      "importance": 0.0138
+    },
+    {
+      "feature": "job_type_Labor",
+      "importance": 0.0115
+    },
+    {
+      "feature": "sleep_quality_Good",
+      "importance": 0.0108
+    },
+    {
+      "feature": "exercise_type_Strength",
+      "importance": 0.0106
+    },
+    {
+      "feature": "sleep_quality_Poor",
+      "importance": 0.0103
+    },
+    {
+      "feature": "exercise_type_Cardio",
+      "importance": 0.0101
+    },
+    {
+      "feature": "diet_type_Omnivore",
+      "importance": 0.01
+    },
+    {
+      "feature": "occupation_Engineer",
+      "importance": 0.0092
+    },
+    {
+      "feature": "alcohol_consumption_Occasionally",
+      "importance": 0.0087
+    },
+    {
+      "feature": "occupation_Doctor",
+      "importance": 0.0078
+    },
+    {
+      "feature": "job_type_Tech",
+      "importance": 0.0078
+    }
+  ]
+}

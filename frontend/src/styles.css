@@ -1,0 +1,18 @@
+:root {
+  --bg: #eef3f1;
+  --paper: #ffffff;
+  --ink: #15302a;
+  --muted: #557069;
+  --line: #cfdcd7;
+  --accent: #1d6f5c;
+  --healthy: #1d6f5c;
+  --risk: #a3262f;
+  --notice: #fff3c4;
+  font-family: 'Atkinson Hyperlegible Next', 'Segoe UI', system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); line-height: 1.5; }
+:focus-visible { outline: 3px solid #e0a800; outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
