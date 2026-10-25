@@ -91,7 +91,7 @@ jobs:
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: frontend/dist/frontend/browser
+          path: frontend/dist/frontend
 
       - id: deploy
         uses: actions/deploy-pages@v4
