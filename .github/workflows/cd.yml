@@ -1,0 +1,97 @@
+name: CD – Build & Deploy
+
+on:
+  # Only deploy after CI has passed on main
+  workflow_run:
+    workflows: ["Full-stack CI"]
+    branches: [main]
+    types: [completed]
+  # Allow manual trigger
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write       # push Docker image to ghcr.io
+  pages: write          # deploy Angular to GitHub Pages
+  id-token: write       # OIDC token for Pages
+
+concurrency:
+  group: cd-pipeline
+  cancel-in-progress: true
+
+jobs:
+  # ─────────────────────────────────────────────
+  # 1. Guard – only run when CI succeeded
+  # ─────────────────────────────────────────────
+  guard:
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
+    steps:
+      - run: echo "CI passed – starting deployment"
+
+  # ─────────────────────────────────────────────
+  # 2. Build & push backend Docker image → GHCR
+  # ─────────────────────────────────────────────
+  docker-backend:
+    needs: guard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set lower-case image name
+        id: image
+        run: echo "name=ghcr.io/${GITHUB_REPOSITORY,,}/backend" >> "$GITHUB_OUTPUT"
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          tags: |
+            ${{ steps.image.outputs.name }}:latest
+            ${{ steps.image.outputs.name }}:${{ github.sha }}
+
+  # ─────────────────────────────────────────────
+  # 3. Deploy Angular frontend → GitHub Pages
+  # ─────────────────────────────────────────────
+  deploy-frontend:
+    needs: guard
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: frontend
+
+      - name: Build Angular (production)
+        run: npx ng build --configuration production --base-href /${{ github.event.repository.name }}/
+        working-directory: frontend
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/dist/frontend/browser
+
+      - id: deploy
+        uses: actions/deploy-pages@v4
